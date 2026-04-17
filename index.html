@@ -5,46 +5,120 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="计算器" />
+  <meta name="apple-mobile-web-app-title" content="牌局分账" />
   <meta name="theme-color" content="#1c1c1e" />
-  <title>计算器</title>
+  <title>牌局分账</title>
   <link rel="manifest" href="manifest.json" />
   <link rel="apple-touch-icon" href="icons/icon-192.png" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="calculator">
-    <div class="display">
-      <div class="expression" id="expression"></div>
-      <div class="result" id="result">0</div>
+  <div class="app-container">
+
+    <!-- ===== 主界面视图 ===== -->
+    <div id="main-view" class="view">
+      <!-- 顶部导航栏 -->
+      <nav class="nav-bar">
+        <button id="history-btn" class="nav-btn">历史记录</button>
+        <h1 class="nav-title">牌局分账</h1>
+        <button id="theme-btn" class="nav-btn">主题</button>
+      </nav>
+
+      <!-- 可滚动内容区 -->
+      <div class="scroll-area">
+
+        <!-- 赢方区域 -->
+        <section class="section-card">
+          <h2 class="section-title">赢方</h2>
+          <div id="winners-list" class="entry-list"></div>
+          <div class="section-footer">
+            <span class="total-label">赢方合计：<span id="win-total">0</span></span>
+            <button id="add-winner-btn" class="add-btn">＋ 添加赢家</button>
+          </div>
+        </section>
+
+        <!-- 输方区域 -->
+        <section class="section-card">
+          <h2 class="section-title">输方</h2>
+          <div id="losers-list" class="entry-list"></div>
+          <div class="section-footer">
+            <span class="total-label">输方合计：<span id="lose-total">0</span></span>
+            <button id="add-loser-btn" class="add-btn">＋ 添加输家</button>
+          </div>
+        </section>
+
+        <!-- 平摊费用区域 -->
+        <section class="section-card">
+          <h2 class="section-title">平摊费用</h2>
+          <div id="shared-costs-list" class="entry-list"></div>
+          <div class="section-footer">
+            <span class="total-label">平摊合计：<span id="shared-total">0</span></span>
+            <button id="add-cost-btn" class="add-btn">＋ 添加费用</button>
+          </div>
+        </section>
+
+        <!-- 计算按钮 -->
+        <div class="action-area">
+          <button id="calc-btn" class="calc-btn">计算</button>
+        </div>
+
+        <!-- 计算结果区域（默认隐藏） -->
+        <div id="result-area" class="result-area" style="display:none;">
+          <!-- 由 JS 动态填充 -->
+        </div>
+
+        <!-- 保存本局按钮（默认隐藏） -->
+        <div class="action-area" id="save-area" style="display:none;">
+          <button id="save-btn" class="save-btn">保存本局</button>
+        </div>
+
+        <!-- 底部安全区域占位 -->
+        <div class="bottom-spacer"></div>
+      </div>
     </div>
-    <div class="buttons">
-      <!-- Row 1 -->
-      <button class="btn func" data-action="clear">AC</button>
-      <button class="btn func" data-action="sign">+/-</button>
-      <button class="btn func" data-action="percent">%</button>
-      <button class="btn operator" data-action="operator" data-value="÷">÷</button>
-      <!-- Row 2 -->
-      <button class="btn number" data-action="number" data-value="7">7</button>
-      <button class="btn number" data-action="number" data-value="8">8</button>
-      <button class="btn number" data-action="number" data-value="9">9</button>
-      <button class="btn operator" data-action="operator" data-value="×">×</button>
-      <!-- Row 3 -->
-      <button class="btn number" data-action="number" data-value="4">4</button>
-      <button class="btn number" data-action="number" data-value="5">5</button>
-      <button class="btn number" data-action="number" data-value="6">6</button>
-      <button class="btn operator" data-action="operator" data-value="−">−</button>
-      <!-- Row 4 -->
-      <button class="btn number" data-action="number" data-value="1">1</button>
-      <button class="btn number" data-action="number" data-value="2">2</button>
-      <button class="btn number" data-action="number" data-value="3">3</button>
-      <button class="btn operator" data-action="operator" data-value="+">+</button>
-      <!-- Row 5 -->
-      <button class="btn number wide" data-action="number" data-value="0">0</button>
-      <button class="btn number" data-action="decimal">.</button>
-      <button class="btn operator" data-action="equals">=</button>
+
+    <!-- ===== 历史列表视图 ===== -->
+    <div id="history-view" class="view" style="display:none;">
+      <!-- 顶部导航栏 -->
+      <nav class="nav-bar">
+        <button id="history-back-btn" class="nav-btn nav-btn-back">← 返回</button>
+        <h1 class="nav-title">历史记录</h1>
+        <div class="nav-placeholder"></div>
+      </nav>
+
+      <!-- 历史列表内容 -->
+      <div class="scroll-area">
+        <div id="history-list" class="history-list">
+          <!-- 由 JS 动态填充 -->
+        </div>
+        <!-- 空状态提示（默认隐藏） -->
+        <div id="history-empty" class="empty-state" style="display:none;">
+          <p>暂无历史记录</p>
+        </div>
+        <div class="bottom-spacer"></div>
+      </div>
     </div>
-  </div>
-  <script src="app.js"></script>
+
+    <!-- ===== 详情视图 ===== -->
+    <div id="detail-view" class="view" style="display:none;">
+      <!-- 顶部导航栏 -->
+      <nav class="nav-bar">
+        <button id="detail-back-btn" class="nav-btn nav-btn-back">← 返回</button>
+        <h1 class="nav-title" id="detail-title">详情</h1>
+        <div class="nav-placeholder"></div>
+      </nav>
+
+      <!-- 详情内容 -->
+      <div class="scroll-area">
+        <div id="detail-content" class="detail-content">
+          <!-- 由 JS 动态填充 -->
+        </div>
+        <div class="bottom-spacer"></div>
+      </div>
+    </div>
+
+  </div><!-- /.app-container -->
+
+  <script src="app.js" defer></script>
 </body>
 </html>

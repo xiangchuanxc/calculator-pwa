@@ -1,0 +1,28 @@
+{
+  "name": "calculator-pwa",
+  "version": "1.0.0",
+  "description": "牌局赢输金额分账计算",
+  "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "test": "vitest --run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xiangchuanxc/calculator-pwa.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/xiangchuanxc/calculator-pwa/issues"
+  },
+  "homepage": "https://github.com/xiangchuanxc/calculator-pwa#readme",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "devDependencies": {
+    "fast-check": "^3.22.0",
+    "vitest": "^1.6.1"
+  }
+}

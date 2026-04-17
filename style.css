@@ -1,3 +1,39 @@
+/* ============================================================
+   CSS 变量与主题系统
+   ============================================================ */
+
+:root {
+  --bg: #1c1c1e;
+  --surface: #2c2c2e;
+  --surface2: #3a3a3c;
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.55);
+  --accent: #ff9f0a;
+  --danger: #ff453a;
+  --supplement: rgba(255, 255, 255, 0.3);
+  --border: rgba(255, 255, 255, 0.1);
+  --btn-func: #636366;
+  --negative: #ff453a;
+}
+
+html.light {
+  --bg: #f2f2f7;
+  --surface: #ffffff;
+  --surface2: #e5e5ea;
+  --text-primary: #1c1c1e;
+  --text-secondary: rgba(0, 0, 0, 0.45);
+  --accent: #ff9f0a;
+  --danger: #ff3b30;
+  --supplement: rgba(0, 0, 0, 0.25);
+  --border: rgba(0, 0, 0, 0.1);
+  --btn-func: #8e8e93;
+  --negative: #ff3b30;
+}
+
+/* ============================================================
+   全局重置
+   ============================================================ */
+
 * {
   margin: 0;
   padding: 0;
@@ -6,154 +42,603 @@
   user-select: none;
 }
 
-:root {
-  --bg: #1c1c1e;
-  --display-bg: #1c1c1e;
-  --btn-number: #333335;
-  --btn-func: #a5a5a5;
-  --btn-operator: #ff9f0a;
-  --btn-operator-active: #ffffff;
-  --text-white: #ffffff;
-  --text-dark: #1c1c1e;
-  --radius: 50%;
-  --gap: 12px;
-}
-
-html, body {
+html,
+body {
   height: 100%;
   background: var(--bg);
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
   overflow: hidden;
+  color: var(--text-primary);
 }
 
-.calculator {
-  display: flex;
-  flex-direction: column;
+/* ============================================================
+   应用容器 — iPhone 安全区域适配
+   ============================================================ */
+
+.app-container {
   height: 100dvh;
-  max-width: 480px;
-  margin: 0 auto;
-  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  padding-top: env(safe-area-inset-top);
+  padding-right: env(safe-area-inset-right);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  background: var(--bg);
+  position: relative;
+  overflow: hidden;
 }
 
-/* Display */
-.display {
-  flex: 1;
+/* ============================================================
+   视图层
+   ============================================================ */
+
+.view {
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  padding: 0 24px 20px;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  /* 补偿 app-container 的 safe-area padding */
+  padding-top: env(safe-area-inset-top);
+  padding-right: env(safe-area-inset-right);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  background: var(--bg);
 }
 
-.expression {
-  font-size: 22px;
-  color: rgba(255, 255, 255, 0.45);
-  text-align: right;
-  min-height: 28px;
-  margin-bottom: 4px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+/* ============================================================
+   顶部导航栏
+   ============================================================ */
+
+.nav-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 44px;
+  padding: 0 16px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  transition: background 0.1s ease, border-color 0.1s ease;
 }
 
-.result {
-  font-size: 72px;
-  font-weight: 300;
-  color: var(--text-white);
-  text-align: right;
-  line-height: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  transition: font-size 0.1s ease;
+.nav-title {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-align: center;
+  flex: 1;
+  transition: color 0.1s ease;
 }
 
-.result.small {
-  font-size: 48px;
-}
-
-.result.xsmall {
-  font-size: 36px;
-}
-
-/* Buttons */
-.buttons {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: var(--gap);
-  padding: 0 var(--gap) var(--gap);
-}
-
-.btn {
-  aspect-ratio: 1;
+.nav-btn {
+  background: none;
   border: none;
-  border-radius: var(--radius);
-  font-size: 28px;
+  color: var(--accent);
+  font-size: 15px;
   font-weight: 400;
   cursor: pointer;
+  padding: 6px 4px;
+  min-width: 60px;
+  transition: opacity 0.1s ease, transform 0.1s ease;
+}
+
+.nav-btn:active {
+  opacity: 0.6;
+  transform: scale(0.96);
+}
+
+.nav-btn-back {
+  text-align: left;
+}
+
+.nav-placeholder {
+  min-width: 60px;
+}
+
+/* ============================================================
+   可滚动内容区
+   ============================================================ */
+
+.scroll-area {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 0 0 8px;
+}
+
+.bottom-spacer {
+  height: 24px;
+}
+
+/* ============================================================
+   区域卡片
+   ============================================================ */
+
+.section-card {
+  background: var(--surface);
+  border-radius: 12px;
+  margin: 16px 16px 0;
+  padding: 12px;
+  transition: background 0.1s ease;
+}
+
+.section-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+  transition: color 0.1s ease;
+}
+
+/* ============================================================
+   录入列表
+   ============================================================ */
+
+.entry-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* 普通录入行 */
+.entry-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+  transition: border-color 0.1s ease;
+}
+
+.entry-row:last-child {
+  border-bottom: none;
+}
+
+.entry-name {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-size: 16px;
+  font-family: inherit;
   outline: none;
-  transition: filter 0.1s ease, transform 0.08s ease;
+  min-width: 0;
+  transition: color 0.1s ease;
+}
+
+.entry-amount {
+  width: 80px;
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-size: 16px;
+  font-family: inherit;
+  text-align: right;
+  outline: none;
+  transition: color 0.1s ease;
+}
+
+.entry-delete {
+  width: 30px;
+  height: 30px;
+  background: var(--danger);
+  border: none;
+  border-radius: 50%;
+  color: #ffffff;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.1s ease, filter 0.1s ease;
 }
 
-.btn:active {
-  filter: brightness(1.4);
+.entry-delete:active {
+  transform: scale(0.96);
+  filter: brightness(0.85);
+}
+
+/* Supplement 条目（补齐行）— 灰色斜体，无删除按钮 */
+.supplement-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+  transition: border-color 0.1s ease;
+}
+
+.supplement-row:last-child {
+  border-bottom: none;
+}
+
+.supplement-name {
+  flex: 1;
+  color: var(--supplement);
+  font-size: 15px;
+  font-style: italic;
+  transition: color 0.1s ease;
+}
+
+.supplement-amount {
+  width: 80px;
+  color: var(--supplement);
+  font-size: 15px;
+  font-style: italic;
+  text-align: right;
+  transition: color 0.1s ease;
+}
+
+/* 补齐按钮 */
+.supplement-fill-btn {
+  background: none;
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  color: var(--accent);
+  font-size: 12px;
+  padding: 2px 8px;
+  margin-left: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.1s ease, color 0.1s ease, transform 0.1s ease;
+}
+
+.supplement-fill-btn:active {
   transform: scale(0.94);
+  background: var(--supplement);
+  color: var(--bg);
 }
 
-.btn.number {
-  background: var(--btn-number);
-  color: var(--text-white);
+/* ============================================================
+   区域底部（合计 + 添加按钮）
+   ============================================================ */
+
+.section-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+  transition: border-color 0.1s ease;
 }
 
-.btn.func {
-  background: var(--btn-func);
-  color: var(--text-dark);
+.total-label {
+  font-size: 14px;
+  color: var(--text-secondary);
+  transition: color 0.1s ease;
+}
+
+.add-btn {
+  background: none;
+  border: none;
+  color: var(--accent);
+  font-size: 15px;
   font-weight: 500;
+  cursor: pointer;
+  padding: 4px 0;
+  transition: opacity 0.1s ease, transform 0.1s ease;
 }
 
-.btn.operator {
-  background: var(--btn-operator);
-  color: var(--text-white);
-  font-size: 32px;
+.add-btn:active {
+  opacity: 0.6;
+  transform: scale(0.96);
 }
 
-.btn.operator.active {
-  background: var(--btn-operator-active);
-  color: var(--btn-operator);
+/* ============================================================
+   操作区域（计算 / 保存按钮）
+   ============================================================ */
+
+.action-area {
+  margin: 16px 16px 0;
 }
 
-/* Wide zero button */
-.btn.wide {
-  grid-column: span 2;
-  border-radius: 40px;
-  aspect-ratio: unset;
-  justify-content: flex-start;
-  padding-left: 28px;
+/* 计算按钮 */
+.calc-btn {
+  width: 100%;
+  height: 50px;
+  background: var(--accent);
+  border: none;
+  border-radius: 12px;
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.1s ease, filter 0.1s ease;
 }
 
-/* Responsive for smaller screens */
-@media (max-height: 700px) {
-  .result {
-    font-size: 56px;
-  }
-  .btn {
-    font-size: 24px;
-  }
-  .btn.operator {
-    font-size: 28px;
-  }
-  :root {
-    --gap: 10px;
-  }
+.calc-btn:active {
+  transform: scale(0.96);
+  filter: brightness(0.85);
 }
 
-@media (max-height: 600px) {
-  .result {
-    font-size: 44px;
-  }
-  .btn {
-    font-size: 20px;
-  }
+.calc-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* 保存按钮 */
+.save-btn {
+  width: 100%;
+  height: 44px;
+  background: var(--surface2);
+  border: none;
+  border-radius: 12px;
+  color: var(--text-primary);
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform 0.1s ease, filter 0.1s ease, background 0.1s ease;
+}
+
+.save-btn:active {
+  transform: scale(0.96);
+  filter: brightness(0.85);
+}
+
+/* ============================================================
+   计算结果区域
+   ============================================================ */
+
+.result-area {
+  background: var(--surface);
+  border-radius: 12px;
+  margin: 16px 16px 0;
+  padding: 12px;
+  transition: background 0.1s ease;
+}
+
+.result-area-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 10px;
+  transition: color 0.1s ease;
+}
+
+/* 结果表头 */
+.result-header {
+  display: flex;
+  align-items: center;
+  padding: 4px 0 8px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 4px;
+  transition: border-color 0.1s ease;
+}
+
+.result-header-name {
+  flex: 1;
+  font-size: 12px;
+  color: var(--text-secondary);
+  transition: color 0.1s ease;
+}
+
+.result-header-cell {
+  width: 56px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-align: right;
+  transition: color 0.1s ease;
+}
+
+/* 结果行 */
+.result-row {
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  transition: border-color 0.1s ease;
+}
+
+.result-row:last-child {
+  border-bottom: none;
+}
+
+.result-name {
+  flex: 1;
+  font-size: 15px;
+  color: var(--text-primary);
+  transition: color 0.1s ease;
+}
+
+.result-cell {
+  width: 56px;
+  font-size: 15px;
+  color: var(--text-primary);
+  text-align: right;
+  transition: color 0.1s ease;
+}
+
+/* 精确分摊列（保留2位小数，字体稍小偏灰） */
+.result-cell-exact {
+  color: var(--text-secondary) !important;
+  font-size: 13px;
+}
+
+/* 负值样式 */
+.negative {
+  color: var(--negative) !important;
+}
+
+/* ============================================================
+   历史列表视图
+   ============================================================ */
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 12px 12px 0;
+}
+
+.history-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: transform 0.1s ease, filter 0.1s ease, background 0.1s ease;
+}
+
+.history-card:active {
+  transform: scale(0.96);
+  filter: brightness(0.85);
+}
+
+.history-card-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.history-card-title {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color 0.1s ease;
+}
+
+.history-card-date {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-top: 3px;
+  transition: color 0.1s ease;
+}
+
+.history-card-delete {
+  width: 32px;
+  height: 32px;
+  background: var(--danger);
+  border: none;
+  border-radius: 50%;
+  color: #ffffff;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-left: 12px;
+  transition: transform 0.1s ease, filter 0.1s ease;
+}
+
+.history-card-delete:active {
+  transform: scale(0.96);
+  filter: brightness(0.85);
+}
+
+/* 空状态提示 */
+.empty-state {
+  text-align: center;
+  padding: 60px 24px;
+  color: var(--text-secondary);
+  font-size: 16px;
+  transition: color 0.1s ease;
+}
+
+/* ============================================================
+   详情视图
+   ============================================================ */
+
+.detail-content {
+  padding: 12px;
+}
+
+.detail-section {
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 12px;
+  transition: background 0.1s ease;
+}
+
+.detail-section-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+  transition: color 0.1s ease;
+}
+
+/* 详情条目行 */
+.detail-entry-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 15px;
+  color: var(--text-primary);
+  transition: border-color 0.1s ease, color 0.1s ease;
+}
+
+.detail-entry-row:last-child {
+  border-bottom: none;
+}
+
+.detail-entry-name {
+  flex: 1;
+  color: var(--text-primary);
+  transition: color 0.1s ease;
+}
+
+.detail-entry-amount {
+  color: var(--text-secondary);
+  transition: color 0.1s ease;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 15px;
+  color: var(--text-primary);
+  transition: border-color 0.1s ease, color 0.1s ease;
+}
+
+.detail-row:last-child {
+  border-bottom: none;
+}
+
+.detail-row-label {
+  color: var(--text-secondary);
+  transition: color 0.1s ease;
+}
+
+/* ============================================================
+   输入框通用 — 允许文字输入时启用 user-select
+   ============================================================ */
+
+input[type="text"],
+input[type="number"] {
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+/* 隐藏 number input 的上下箭头 */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
 }

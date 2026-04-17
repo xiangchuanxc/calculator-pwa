@@ -1,12 +1,12 @@
-const CACHE_NAME = 'calculator-v1';
+const CACHE_NAME = 'pwa-v2';
 const ASSETS = [
-  '/',
-  '/index.html',
-  '/style.css',
-  '/app.js',
-  '/manifest.json',
-  '/icons/icon-192.png',
-  '/icons/icon-512.png',
+  './',
+  './index.html',
+  './app.js',
+  './style.css',
+  './manifest.json',
+  './icons/icon-192.png',
+  './icons/icon-512.png',
 ];
 
 // 安装：缓存所有资源

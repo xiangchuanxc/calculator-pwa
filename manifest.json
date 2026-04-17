@@ -1,8 +1,8 @@
 {
-  "name": "计算器",
-  "short_name": "计算器",
-  "description": "简洁好用的计算器",
-  "start_url": "/",
+  "name": "牌局分账",
+  "short_name": "分账",
+  "description": "牌局赢输金额分账计算",
+  "start_url": "./",
   "display": "standalone",
   "background_color": "#1c1c1e",
   "theme_color": "#1c1c1e",
