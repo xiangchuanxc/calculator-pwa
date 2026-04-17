@@ -1,0 +1,159 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+:root {
+  --bg: #1c1c1e;
+  --display-bg: #1c1c1e;
+  --btn-number: #333335;
+  --btn-func: #a5a5a5;
+  --btn-operator: #ff9f0a;
+  --btn-operator-active: #ffffff;
+  --text-white: #ffffff;
+  --text-dark: #1c1c1e;
+  --radius: 50%;
+  --gap: 12px;
+}
+
+html, body {
+  height: 100%;
+  background: var(--bg);
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+  overflow: hidden;
+}
+
+.calculator {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+/* Display */
+.display {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 0 24px 20px;
+}
+
+.expression {
+  font-size: 22px;
+  color: rgba(255, 255, 255, 0.45);
+  text-align: right;
+  min-height: 28px;
+  margin-bottom: 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.result {
+  font-size: 72px;
+  font-weight: 300;
+  color: var(--text-white);
+  text-align: right;
+  line-height: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: font-size 0.1s ease;
+}
+
+.result.small {
+  font-size: 48px;
+}
+
+.result.xsmall {
+  font-size: 36px;
+}
+
+/* Buttons */
+.buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--gap);
+  padding: 0 var(--gap) var(--gap);
+}
+
+.btn {
+  aspect-ratio: 1;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 28px;
+  font-weight: 400;
+  cursor: pointer;
+  outline: none;
+  transition: filter 0.1s ease, transform 0.08s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn:active {
+  filter: brightness(1.4);
+  transform: scale(0.94);
+}
+
+.btn.number {
+  background: var(--btn-number);
+  color: var(--text-white);
+}
+
+.btn.func {
+  background: var(--btn-func);
+  color: var(--text-dark);
+  font-weight: 500;
+}
+
+.btn.operator {
+  background: var(--btn-operator);
+  color: var(--text-white);
+  font-size: 32px;
+}
+
+.btn.operator.active {
+  background: var(--btn-operator-active);
+  color: var(--btn-operator);
+}
+
+/* Wide zero button */
+.btn.wide {
+  grid-column: span 2;
+  border-radius: 40px;
+  aspect-ratio: unset;
+  justify-content: flex-start;
+  padding-left: 28px;
+}
+
+/* Responsive for smaller screens */
+@media (max-height: 700px) {
+  .result {
+    font-size: 56px;
+  }
+  .btn {
+    font-size: 24px;
+  }
+  .btn.operator {
+    font-size: 28px;
+  }
+  :root {
+    --gap: 10px;
+  }
+}
+
+@media (max-height: 600px) {
+  .result {
+    font-size: 44px;
+  }
+  .btn {
+    font-size: 20px;
+  }
+}

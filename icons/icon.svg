@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192">
+  <!-- 背景 -->
+  <rect width="192" height="192" rx="42" fill="#1c1c1e"/>
+  <!-- 白色圆点 x2 -->
+  <circle cx="58" cy="54" r="12" fill="#ffffff"/>
+  <circle cx="134" cy="54" r="12" fill="#ffffff"/>
+  <!-- 橙色等号两横 -->
+  <rect x="48" y="100" width="96" height="18" rx="9" fill="#ff9f0a"/>
+  <rect x="48" y="128" width="96" height="18" rx="9" fill="#ff9f0a"/>
+</svg>
