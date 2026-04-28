@@ -216,8 +216,8 @@ describe('calculate', () => {
   it('Property 4: 净赢额等于赢额减去分摊金额，isNegative 当且仅当 netWin < 0', () => {
     fc.assert(
       fc.property(
-        fc.nat({ min: 1 }),  // winAmount（正整数）
-        fc.nat(),             // shareAmount（非负整数）
+        fc.integer({ min: 1 }),  // winAmount（正整数，fc.nat 不支持 min 参数）
+        fc.nat(),                 // shareAmount（非负整数）
         (winAmount, shareAmount) => {
           // 构造一个最简场景：单赢家，赢输相等，平摊费用 = shareAmount
           const winners = [{ id: '1', name: '玩家1', amount: winAmount }];

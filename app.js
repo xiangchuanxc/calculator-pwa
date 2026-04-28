@@ -329,7 +329,7 @@ function createEntryRow(entry, type) {
   nameInput.className = 'entry-name';
   nameInput.type = 'text';
   nameInput.value = entry.name;
-  nameInput.maxLength = 20;
+  nameInput.maxLength = 6;
 
   // 姓名 blur：为空时恢复默认名称
   nameInput.addEventListener('blur', () => {
@@ -339,6 +339,9 @@ function createEntryRow(entry, type) {
       entry.name = nameInput.value.trim();
     }
   });
+
+  const divider1 = document.createElement('div');
+  divider1.className = 'entry-divider';
 
   const amountInput = document.createElement('input');
   amountInput.className = 'entry-amount';
@@ -394,8 +397,13 @@ function createEntryRow(entry, type) {
     updateTotals();
   });
 
+  const divider2 = document.createElement('div');
+  divider2.className = 'entry-divider';
+
   row.appendChild(nameInput);
+  row.appendChild(divider1);
   row.appendChild(amountInput);
+  row.appendChild(divider2);
   row.appendChild(deleteBtn);
   return row;
 }
@@ -604,6 +612,42 @@ function renderCalcResult(result) {
     row.appendChild(netSpan);
     area.appendChild(row);
   });
+
+  // 合计行
+  const totalWin = sortedResults.reduce((s, r) => s + r.winAmount, 0);
+  const totalShare = sortedResults.reduce((s, r) => s + r.shareAmount, 0);
+  const totalExact = sortedResults.reduce((s, r) => s + (r.exactShare !== undefined ? r.exactShare : r.shareAmount), 0);
+  const totalNet = sortedResults.reduce((s, r) => s + r.netWin, 0);
+
+  const totalRow = document.createElement('div');
+  totalRow.className = 'result-row result-total-row';
+
+  const totalLabel = document.createElement('span');
+  totalLabel.className = 'result-name result-total-label';
+  totalLabel.textContent = '合计';
+
+  const totalWinSpan = document.createElement('span');
+  totalWinSpan.className = 'result-cell result-total-label';
+  totalWinSpan.textContent = totalWin;
+
+  const totalShareSpan = document.createElement('span');
+  totalShareSpan.className = 'result-cell result-total-label';
+  totalShareSpan.textContent = totalShare;
+
+  const totalExactSpan = document.createElement('span');
+  totalExactSpan.className = 'result-cell result-cell-exact result-total-label';
+  totalExactSpan.textContent = totalExact.toFixed(2);
+
+  const totalNetSpan = document.createElement('span');
+  totalNetSpan.className = 'result-cell result-total-label' + (totalNet < 0 ? ' negative' : '');
+  totalNetSpan.textContent = totalNet;
+
+  totalRow.appendChild(totalLabel);
+  totalRow.appendChild(totalWinSpan);
+  totalRow.appendChild(totalShareSpan);
+  totalRow.appendChild(totalExactSpan);
+  totalRow.appendChild(totalNetSpan);
+  area.appendChild(totalRow);
 }
 
 /* ============================================================
